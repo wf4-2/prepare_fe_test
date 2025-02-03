@@ -58,8 +58,12 @@ body.dark-mode {
 .timer {
   font-size: 16px;
   font-weight: bold;
-  color: #dc3545;
+  color: #007bff;
   margin-bottom: 15px;
+}
+
+.timer.danger {
+  color: #dc3545;
 }
 
 .dark-mode .timer {
@@ -104,6 +108,10 @@ body.dark-mode {
   text-align: center;
   font-weight: bold;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option.disabled {
+  pointer-events: none; /* 클릭 비활성화 */
 }
 
 .dark-mode .option {
