@@ -25,7 +25,22 @@
           React.useState(0);
         const [selectedOption, setSelectedOption] = React.useState(null);
         const [isAnswerChecked, setIsAnswerChecked] = React.useState(false);
-        const [isDarkMode, setIsDarkMode] = React.useState(false);
+        const [isDarkMode, setIsDarkMode] = React.useState(() => {
+          // Check system preference on initial load
+          return (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+          );
+        });
+
+        // Apply initial dark mode class based on system preference
+        React.useEffect(() => {
+          if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+          } else {
+            document.body.classList.remove('dark-mode');
+          }
+        }, [isDarkMode]);
 
         const currentQuestion = questions[currentQuestionIndex];
 
