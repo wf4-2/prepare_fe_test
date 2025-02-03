@@ -232,7 +232,7 @@ const questions = [
     question:
       'CSS에서 `position: absolute;`를 적용하면 요소의 위치는 어떻게 결정되는가?',
     options: [
-      '부모 요소의 `relative` 위치를 기준으로 배치됨',
+      '가장 가까운 position이 지정된 조상 요소를 기준으로 배치됨',
       '부모 요소의 `absolute` 위치를 기준으로 배치됨',
       '브라우저 뷰포트를 기준으로 배치됨',
       '항상 좌측 상단(0,0) 위치에서 배치됨',
@@ -436,14 +436,9 @@ const questions = [
     id: 41,
     category: 'JavaScript',
     question:
-      'JavaScript에서 `typeof` 연산자를 사용하면 어떤 결과를 얻을 수 있는가?',
-    options: [
-      '변수의 길이를 반환한다.',
-      '변수의 타입을 문자열로 반환한다.',
-      '변수의 값을 반환한다.',
-      '변수의 참조 주소를 반환한다.',
-    ],
-    answer: 1,
+      'typeof 연산자를 사용하면 변수의 타입을 문자열로 반환하는데, 다음 중 typeof null의 결과는 무엇인가?',
+    options: ['null', 'undefined', 'object', 'string'],
+    answer: 2,
   },
   {
     id: 42,
@@ -663,7 +658,7 @@ const questions = [
     question: 'React에서 상태(state)를 관리하는 올바른 방법은?',
     options: [
       '`this.state = { count: 0 }` 직접 변경',
-      '`setState()` 또는 `useState()`를 통해 변경',
+      '`setState()` 또는 `useState()`를 사용하며, 복잡한 상태 관리는 `useReducer()`를 통해 변경가능',
       '`this.state.count++` 직접 값 증가',
       '`props`를 변경하여 상태 관리',
     ],
@@ -697,7 +692,7 @@ const questions = [
     id: 65,
     category: 'React',
     question: 'JSX에서 `class` 대신 사용해야 하는 속성은?',
-    options: ['`css`', '`className`', '`style`', '`classname`'],
+    options: ['`css`', '`className`', '`style`', '`class`'],
     answer: 1,
   },
   {
@@ -727,14 +722,14 @@ const questions = [
   {
     id: 68,
     category: 'React',
-    question: '`useEffect(() => {...}, [])`의 의미는?',
+    question: '`useEffect(() => {...}, [])`가 실행되는 타이밍은?',
     options: [
-      '컴포넌트가 업데이트될 때마다 실행',
-      '마운트될 때 한 번만 실행',
+      '마운트될 때 한 번 실행되며, 이후 다시 실행되지 않음',
+      '의존성이 변경될 때 실행',
       '언마운트될 때 실행',
       '렌더링될 때마다 실행',
     ],
-    answer: 1,
+    answer: 0,
   },
   {
     id: 69,
