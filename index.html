@@ -28,7 +28,8 @@
         const [randomQuestions, setRandomQuestions] = React.useState(() =>
           shuffleArray(questions)
         );
-        const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+        const [currentQuestionIndex, setCurrentQuestionIndex] =
+          React.useState(0);
         const [selectedOption, setSelectedOption] = React.useState(null);
         const [isAnswerChecked, setIsAnswerChecked] = React.useState(false);
         const [score, setScore] = React.useState(0);
@@ -37,7 +38,7 @@
 
         React.useEffect(() => {
           if (timeLeft <= 0) {
-            checkAnswer(true); // 시간이 다 되면 강제 정답 확인
+            checkAnswer(true);
             return;
           }
           if (!isAnswerChecked) {
@@ -45,6 +46,21 @@
             return () => clearTimeout(timer);
           }
         }, [timeLeft, isAnswerChecked]);
+
+        const [isDarkMode, setIsDarkMode] = React.useState(() => {
+          return (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+          );
+        });
+
+        React.useEffect(() => {
+          if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+          } else {
+            document.body.classList.remove('dark-mode');
+          }
+        }, [isDarkMode]);
 
         const currentQuestion = randomQuestions[currentQuestionIndex];
 
@@ -67,6 +83,10 @@
           setTimeout(() => nextQuestion(), 2000);
         };
 
+        const toggleDarkMode = () => {
+          setIsDarkMode(!isDarkMode);
+        };
+
         const nextQuestion = () => {
           if (currentQuestionIndex < randomQuestions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -87,44 +107,89 @@
           setTimeLeft(15);
         };
 
+        const quitQuiz = () => {
+          setShowResult(true);
+        };
+
         if (showResult) {
           return (
-            <div className="quiz-container">
+            <div className={`quiz-container ${isDarkMode ? 'dark-mode' : ''}`}>
               <h2>퀴즈 완료!</h2>
-              <p>당신의 점수: {score} / {randomQuestions.length}</p>
+              {currentQuestionIndex === randomQuestions.length - 1 ? (
+                <p>
+                  당신의 점수: {score} / {randomQuestions.length}
+                </p>
+              ) : (
+                <p>
+                  퀴즈를 중도 포기했습니다. 현재 점수: {score} /{' '}
+                  {currentQuestionIndex + 1}
+                </p>
+              )}
               <button onClick={restartQuiz}>처음으로 돌아가기</button>
             </div>
           );
         }
 
         return (
-          <div className="quiz-container">
-            <h2>React Quiz</h2>
-            <div className="progress-bar-container">
-              <div className="progress-bar" style={{ width: `${(currentQuestionIndex + 1) / randomQuestions.length * 100}%` }}></div>
+          <div className={`quiz-container ${isDarkMode ? 'dark-mode' : ''}`}>
+            <div className='dark-mode-toggle' onClick={toggleDarkMode}>
+              {isDarkMode ? '☀️' : '🌙'}
             </div>
-            <div className={`timer ${timeLeft <= 5 ? "danger" : ""}`}>⏳ 남은 시간: {timeLeft}초</div>
-            <div className="question">{currentQuestion.question}</div>
-            <div className="options">
+            <h2>React Quiz</h2>
+            <div className='progress-bar-container'>
+              <div
+                className='progress-bar'
+                style={{
+                  width: `${
+                    ((currentQuestionIndex + 1) / randomQuestions.length) * 100
+                  }%`,
+                }}
+              ></div>
+            </div>
+
+            <div className='question-info'>
+              <span>
+                문제 {currentQuestionIndex + 1} / {randomQuestions.length}
+              </span>
+              <div className={`timer ${timeLeft <= 5 ? 'danger' : ''}`}>
+                ⏳ 남은 시간: {timeLeft}초
+              </div>
+              <span>분류: {currentQuestion.category}</span>
+            </div>
+            <div className='question'>{currentQuestion.question}</div>
+            <div className='options'>
               {currentQuestion.options.map((option, index) => (
                 <div
                   key={index}
-                  className={`option 
-                    ${selectedOption === index ? "selected" : ""} 
-                    ${isAnswerChecked && index === currentQuestion.answer ? "correct" : ""} 
-                    ${isAnswerChecked && selectedOption === index && index !== currentQuestion.answer ? "incorrect" : ""} 
-                    ${isAnswerChecked ? "disabled" : ""}`}
+                  className={`option
+                    ${selectedOption === index ? 'selected' : ''}
+                    ${
+                      isAnswerChecked && index === currentQuestion.answer
+                        ? 'correct'
+                        : ''
+                    }
+                    ${
+                      isAnswerChecked &&
+                      selectedOption === index &&
+                      index !== currentQuestion.answer
+                        ? 'incorrect'
+                        : ''
+                    }
+                    ${isAnswerChecked ? 'disabled' : ''}`}
                   onClick={() => handleOptionSelect(index)}
                 >
                   {option}
                 </div>
               ))}
             </div>
+            <button onClick={quitQuiz} className='quit-button'>
+              퀴즈 포기
+            </button>
           </div>
         );
       }
 
-      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
   </body>
 </html>
